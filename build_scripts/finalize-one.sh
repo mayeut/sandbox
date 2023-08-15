@@ -16,12 +16,14 @@ fi
 PY_VER=$(${PREFIX}/bin/python -c "import sys; print('.'.join(str(v) for v in sys.version_info[:2]))")
 PY_IMPL=$(${PREFIX}/bin/python -c "import sys; print(sys.implementation.name)")
 
-#time ${PREFIX}/bin/python /tmp/get-pip.py --no-setuptools --no-wheel
-
-# Since we fall back on a canned copy of pip, we might not have
-# the latest pip and friends. Upgrade them to make sure.
-time /usr/local/bin/python${PY_VER} -m pip -V
-time /usr/local/bin/python${PY_VER} -m pip --python ${PREFIX}/bin/python install -U --require-hashes -r ${MY_DIR}/requirements${PY_VER}.txt
+# Install pinned packages for this python version.
+# Use the already intsalled cpython pip to bootstrap pip if available
+if [ -f /usr/local/bin/python${PY_VER} ]; then
+	time /usr/local/bin/python${PY_VER} -m pip --python ${PREFIX}/bin/python install -U --require-hashes -r ${MY_DIR}/requirements${PY_VER}.txt
+else
+	${PREFIX}/bin/python -m ensurepip
+	${PREFIX}/bin/python -m pip install -U --require-hashes -r ${MY_DIR}/requirements${PY_VER}.txt
+fi
 if [ -e ${PREFIX}/bin/pip3 ] && [ ! -e ${PREFIX}/bin/pip ]; then
 	ln -s pip3 ${PREFIX}/bin/pip
 fi

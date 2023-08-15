@@ -22,6 +22,10 @@ jobs:
         rm -rf /usr/local/bin/pypy*
         rm -rf /opt/python/pp*
         rm -rf /opt/_internal/pypy*
+        python3.7 -m pip list
+        python3.8 -m pip list
+        python3.9 -m pip list
+        python3.10 -m pip list
     - run: python3.10 -u ./build_scripts/manylinux-python.py ensure pp37-pypy37_pp73
     - run: python3.10 -u ./build_scripts/manylinux-python.py ensure pp38-pypy38_pp73
     - run: python3.10 -u ./build_scripts/manylinux-python.py ensure pp39-pypy39_pp73
