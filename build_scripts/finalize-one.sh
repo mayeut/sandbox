@@ -13,7 +13,7 @@ MY_DIR=$(dirname "${BASH_SOURCE[0]}")
 if [ -e ${PREFIX}/bin/python3 ] && [ ! -e ${PREFIX}/bin/python ]; then
 	ln -s python3 ${PREFIX}/bin/python
 fi
-${PREFIX}/bin/python -m ensurepip
+time ${PREFIX}/bin/python -m ensurepip
 if [ -e ${PREFIX}/bin/pip3 ] && [ ! -e ${PREFIX}/bin/pip ]; then
 	ln -s pip3 ${PREFIX}/bin/pip
 fi
