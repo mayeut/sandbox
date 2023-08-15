@@ -21,7 +21,7 @@ PY_VER=$(${PREFIX}/bin/python -c "import sys; print('.'.join(str(v) for v in sys
 PY_IMPL=$(${PREFIX}/bin/python -c "import sys; print(sys.implementation.name)")
 # Since we fall back on a canned copy of pip, we might not have
 # the latest pip and friends. Upgrade them to make sure.
-${PREFIX}/bin/pip install -U --require-hashes -r ${MY_DIR}/requirements${PY_VER}.txt
+time ${PREFIX}/bin/python -m pip install -U --require-hashes -r ${MY_DIR}/requirements${PY_VER}.txt
 # Create a symlink to PREFIX using the ABI_TAG in /opt/python/
 ABI_TAG=$(${PREFIX}/bin/python ${MY_DIR}/python-tag-abi-tag.py)
 ln -s ${PREFIX} /opt/python/${ABI_TAG}
