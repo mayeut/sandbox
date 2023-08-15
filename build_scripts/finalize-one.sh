@@ -20,7 +20,7 @@ fi
 PY_VER=$(${PREFIX}/bin/python -c "import sys; print('.'.join(str(v) for v in sys.version_info[:2]))")
 PY_IMPL=$(${PREFIX}/bin/python -c "import sys; print(sys.implementation.name)")
 
-time ${PREFIX}/bin/python /tmp/get-pip.py -U --require-hashes -r ${MY_DIR}/requirements${PY_VER}.txt
+time ${PREFIX}/bin/python /tmp/get-pip.py -U -r ${MY_DIR}/requirements${PY_VER}.txt
 
 # Since we fall back on a canned copy of pip, we might not have
 # the latest pip and friends. Upgrade them to make sure.
