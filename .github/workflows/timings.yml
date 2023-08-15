@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: quay.io/pypa/manylinux2014_x86_64:latest
+    env:
+      HOME: "/root"
     steps:
     - uses: actions/checkout@v3
     - name: Remove existing PyPy
