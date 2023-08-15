@@ -9,7 +9,7 @@ PREFIX=$1
 MY_DIR=$(dirname "${BASH_SOURCE[0]}")
 
 if [ ! -f /tmp/get-pip.py ]; then
-	curl -sSL https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
+	time curl -sSL https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
 fi
 
 # Some python's install as bin/python3. Make them available as
