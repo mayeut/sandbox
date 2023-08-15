@@ -13,12 +13,20 @@ SHA256=$3
 TMPDIR=/tmp/manylinux-download
 PREFIX="/opt/_internal/${ABI_TAG}"
 
+case ${DOWNLOAD_URL} in
+  *.tar) COMP=;;
+  *.tar.gz) COMP=z;;
+  *.tar.bz2) COMP=j;;
+  *.tar.xz) COMP=J;;
+  *) echo "unsupported archive"; exit 1;;
+esac
+
 mkdir ${PREFIX}
 
 mkdir -p ${TMPDIR}
 
 echo "${SHA256} -" > ${TMPDIR}/sha256
-time curl -fsSL ${DOWNLOAD_URL} | tee >(tar -C ${PREFIX} --strip-components 1 -xjf -) | sha256sum -c ${TMPDIR}/sha256
+time curl -fsSL ${DOWNLOAD_URL} | tee >(tar -C ${PREFIX} --strip-components 1 -x${COMP}f -) | sha256sum -c ${TMPDIR}/sha256
 
 # add a generic "python" symlink
 if [ ! -f "${PREFIX}/bin/python" ]; then
