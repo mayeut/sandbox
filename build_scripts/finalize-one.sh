@@ -8,10 +8,6 @@ PREFIX=$1
 # Get script directory
 MY_DIR=$(dirname "${BASH_SOURCE[0]}")
 
-if [ ! -f /tmp/get-pip.py ]; then
-	time curl -sSL https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
-fi
-
 # Some python's install as bin/python3. Make them available as
 # bin/python.
 if [ -e ${PREFIX}/bin/python3 ] && [ ! -e ${PREFIX}/bin/python ]; then
@@ -24,6 +20,7 @@ PY_IMPL=$(${PREFIX}/bin/python -c "import sys; print(sys.implementation.name)")
 
 # Since we fall back on a canned copy of pip, we might not have
 # the latest pip and friends. Upgrade them to make sure.
+time /usr/local/bin/python${PY_VER} -m pip -V
 time /usr/local/bin/python${PY_VER} -m pip --python ${PREFIX}/bin/python install -U --require-hashes -r ${MY_DIR}/requirements${PY_VER}.txt
 if [ -e ${PREFIX}/bin/pip3 ] && [ ! -e ${PREFIX}/bin/pip ]; then
 	ln -s pip3 ${PREFIX}/bin/pip
