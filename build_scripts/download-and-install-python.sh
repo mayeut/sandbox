@@ -18,7 +18,7 @@ mkdir ${PREFIX}
 mkdir -p ${TMPDIR}
 
 echo "${SHA256} -" > ${TMPDIR}/sha256
-time curl -fsSL ${DOWNLOAD_URL} | tee >(tar -C ${PREFIX} --strip-components 1 -xf -) | sha256sum -c ${TMPDIR}/sha256
+time curl -fsSL ${DOWNLOAD_URL} | tee >(tar -C ${PREFIX} --strip-components 1 -xjf -) | sha256sum -c ${TMPDIR}/sha256
 
 # add a generic "python" symlink
 if [ ! -f "${PREFIX}/bin/python" ]; then
