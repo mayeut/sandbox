@@ -16,12 +16,12 @@ PREFIX="/opt/_internal/${ABI_TAG}"
 
 mkdir -p ${TMPDIR}
 
-curl -fsSLo ${TARBALL} ${DOWNLOAD_URL}
+time curl -fsSLo ${TARBALL} ${DOWNLOAD_URL}
 echo "${SHA256} ${TARBALL}" > ${TARBALL}.sha256
-sha256sum -c ${TARBALL}.sha256
+time sha256sum -c ${TARBALL}.sha256
 
 mkdir ${PREFIX}
-tar -C ${PREFIX} --strip-components 1 -xf ${TARBALL}
+time tar -C ${PREFIX} --strip-components 1 -xf ${TARBALL}
 
 # add a generic "python" symlink
 if [ ! -f "${PREFIX}/bin/python" ]; then
@@ -29,7 +29,7 @@ if [ ! -f "${PREFIX}/bin/python" ]; then
 fi
 
 # remove debug symbols if any
-find ${PREFIX}/bin -name '*.debug' -delete
+time find ${PREFIX}/bin -name '*.debug' -delete
 
 rm -rf ${TMPDIR}
 
