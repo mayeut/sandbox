@@ -8,8 +8,8 @@ on:
     # allow manual runs on branches without a PR
 
 jobs:
-  timings:
-    name: Timings
+  timings-per-version:
+    name: Timings per version
     runs-on: ubuntu-latest
     container:
       image: quay.io/pypa/manylinux2014_x86_64:latest
@@ -31,3 +31,22 @@ jobs:
     - run: python3.10 -u ./build_scripts/manylinux-python.py ensure pp39-pypy39_pp73
     - run: python3.10 -u ./build_scripts/manylinux-python.py ensure pp310-pypy310_pp73
     - run: python3.10 -u ./build_scripts/manylinux-python.py ensure graalpy310-graalpy230_310_native
+  timings-all-pypy:
+    name: Timings all pypy
+    runs-on: ubuntu-latest
+    container:
+      image: quay.io/pypa/manylinux2014_x86_64:latest
+    env:
+      HOME: "/root"
+    steps:
+    - uses: actions/checkout@v3
+    - name: Remove existing PyPy
+      run: |
+        rm -rf /usr/local/bin/pypy*
+        rm -rf /opt/python/pp*
+        rm -rf /opt/_internal/pypy*
+        python3.7 -m pip list
+        python3.8 -m pip list
+        python3.9 -m pip list
+        python3.10 -m pip list
+    - run: python3.10 -u ./build_scripts/manylinux-python.py ensure pp37-pypy37_pp73 pp38-pypy38_pp73 pp39-pypy39_pp73 pp310-pypy310_pp73
