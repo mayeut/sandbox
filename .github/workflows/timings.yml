@@ -1,0 +1,20 @@
+name: Timings
+
+on:
+  push:
+    branches:
+      - manylinux-interpreters
+  workflow_dispatch:
+    # allow manual runs on branches without a PR
+
+jobs:
+  timings:
+    name: Timings
+    runs-on: ubuntu-latest
+    container:
+      image: quay.io/pypa/manylinux2014_x86_64:latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Timings
+      run: |
+        time python3.10 ./build_scripts/manylinux-python.py ensure-all
