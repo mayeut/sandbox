@@ -13,9 +13,7 @@ MY_DIR=$(dirname "${BASH_SOURCE[0]}")
 if [ -e ${PREFIX}/bin/python3 ] && [ ! -e ${PREFIX}/bin/python ]; then
 	ln -s python3 ${PREFIX}/bin/python
 fi
-if ! ${PREFIX}/bin/python -m pip -V; then
-	time ${PREFIX}/bin/python -m ensurepip
-fi
+time ${PREFIX}/bin/python -m ensurepip
 PY_VER=$(${PREFIX}/bin/python -c "import sys; print('.'.join(str(v) for v in sys.version_info[:2]))")
 PY_IMPL=$(${PREFIX}/bin/python -c "import sys; print(sys.implementation.name)")
 # Since we fall back on a canned copy of pip, we might not have

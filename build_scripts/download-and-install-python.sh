@@ -28,11 +28,6 @@ mkdir -p ${TMPDIR}
 echo "${SHA256} -" > ${TMPDIR}/sha256
 time curl -fsSL ${DOWNLOAD_URL} | tee >(tar -C ${PREFIX} --strip-components 1 -x${COMP}f -) | sha256sum -c ${TMPDIR}/sha256
 
-# add a generic "python" symlink
-if [ ! -f "${PREFIX}/bin/python" ]; then
-	ln -s python3 ${PREFIX}/bin/python
-fi
-
 # remove debug symbols if any
 time find ${PREFIX}/bin -name '*.debug' -delete
 
