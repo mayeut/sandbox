@@ -10,18 +10,15 @@ ABI_TAG=$1
 DOWNLOAD_URL=$2
 SHA256=$3
 
-TMPDIR=/tmp/manylinux-download/
-TARBALL=${TMPDIR}/archive
+TMPDIR=/tmp/manylinux-download
 PREFIX="/opt/_internal/${ABI_TAG}"
+
+mkdir ${PREFIX}
 
 mkdir -p ${TMPDIR}
 
-time curl -fsSLo ${TARBALL} ${DOWNLOAD_URL}
-echo "${SHA256} ${TARBALL}" > ${TARBALL}.sha256
-time sha256sum -c ${TARBALL}.sha256
-
-mkdir ${PREFIX}
-time tar -C ${PREFIX} --strip-components 1 -xf ${TARBALL}
+echo "${SHA256} -" > ${TMPDIR}/sha256
+time curl -fsSL ${DOWNLOAD_URL} | tee >(tar -C ${PREFIX} --strip-components 1 -xf) | sha256sum -c ${TMPDIR}/sha256
 
 # add a generic "python" symlink
 if [ ! -f "${PREFIX}/bin/python" ]; then
