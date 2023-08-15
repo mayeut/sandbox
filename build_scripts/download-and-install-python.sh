@@ -33,4 +33,4 @@ find ${PREFIX}/bin -name '*.debug' -delete
 
 rm -rf ${TMPDIR}
 
-${MY_DIR}/finalize-one.sh ${PREFIX}
+time ${MY_DIR}/finalize-one.sh ${PREFIX}
