@@ -1,0 +1,280 @@
+name: Python test bitness
+
+on:
+  push:
+    branches:
+      - python-maxsize-sizeof
+  workflow_dispatch:
+    # allow manual runs on branches without a PR
+
+jobs:
+  bitness_64b_python_docker:
+    name: python:alpine ${{ matrix.platform }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: ["amd64", "arm64/v8", "ppc64le", "s390x"]
+    steps:
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+    - name: Check 64b python
+      run: |
+        docker run --platform linux/${{ matrix.platform }} -i --rm python:alpine /bin/sh << EOF
+        set -euxo pipefail
+        /usr/local/bin/python3 -c "import sys; assert sys.maxsize == 9223372036854775807"
+        /usr/local/bin/python3 -c "import struct; assert struct.calcsize('P') == 8"
+        exit 0
+        EOF
+  bitness_32b_python_docker:
+    name: python:alpine ${{ matrix.platform }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: ["386", "arm/v6", "arm/v7"]
+    steps:
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+    - name: Check 32b python
+      run: |
+        docker run --platform linux/${{ matrix.platform }} -i --rm python:alpine /bin/sh << EOF
+        set -euxo pipefail
+        /usr/local/bin/python3 -c "import sys; assert sys.maxsize == 2147483647"
+        /usr/local/bin/python3 -c "import struct; assert struct.calcsize('P') == 4"
+        exit 0
+        EOF
+  bitness_64b_manylinux_pypy:
+    name: ${{ matrix.platform }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: ["manylinux2014_x86_64", "manylinux2014_aarch64", "manylinux_2_28_x86_64", "manylinux_2_28_aarch64"]
+    steps:
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+    - name: Check 64b python
+      run: |
+        docker run -i --rm quay.io/pypa/${{ matrix.platform }}:latest << EOF
+        set -euxo pipefail
+        for PYTHON in python3.7 python3.8 python3.9 python3.10 python3.11 python3.12 pypy3.7 pypy3.8 pypy3.9 pypy3.10; do
+            \${PYTHON} -c "import sys; assert sys.maxsize == 9223372036854775807"
+            \${PYTHON} -c "import struct; assert struct.calcsize('P') == 8"
+        done
+        exit 0
+        EOF
+  bitness_32b_manylinux_pypy:
+    name: ${{ matrix.platform }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: ["manylinux2014_i686"]
+    steps:
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+    - name: Check 32b python
+      run: |
+        docker run -i --rm quay.io/pypa/${{ matrix.platform }}:latest << EOF
+        set -euxo pipefail
+        for PYTHON in python3.7 python3.8 python3.9 python3.10 python3.11 python3.12 pypy3.7 pypy3.8 pypy3.9 pypy3.10; do
+            \${PYTHON} -c "import sys; assert sys.maxsize == 2147483647"
+            \${PYTHON} -c "import struct; assert struct.calcsize('P') == 4"
+        done
+        exit 0
+        EOF
+  bitness_64b_manylinux_nopypy:
+    name: Manylinux ${{ matrix.platform }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: ["manylinux2014_ppc64le", "manylinux2014_s390x", "manylinux_2_28_ppc64le", "manylinux_2_28_s390x", "musllinux_1_1_x86_64", "musllinux_1_1_aarch64", "musllinux_1_1_ppc64le", "musllinux_1_1_s390x", "musllinux_1_2_x86_64", "musllinux_1_2_aarch64", "musllinux_1_2_ppc64le", "musllinux_1_2_s390x"]
+    steps:
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+    - name: Check 64b python
+      run: |
+        docker run -i --rm quay.io/pypa/${{ matrix.platform }}:latest << EOF
+        set -euxo pipefail
+        for PYTHON in python3.7 python3.8 python3.9 python3.10 python3.11 python3.12; do
+            \${PYTHON} -c "import sys; assert sys.maxsize == 9223372036854775807"
+            \${PYTHON} -c "import struct; assert struct.calcsize('P') == 8"
+        done
+        exit 0
+        EOF
+  bitness_32b_manylinux_nopypy:
+    name: Manylinux ${{ matrix.platform }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: ["musllinux_1_1_i686", "musllinux_1_2_i686"]
+    steps:
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+    - name: Check 32b python
+      run: |
+        docker run -i --rm quay.io/pypa/${{ matrix.platform }}:latest << EOF
+        set -euxo pipefail
+        for PYTHON in python3.7 python3.8 python3.9 python3.10 python3.11 python3.12; do
+            \${PYTHON} -c "import sys; assert sys.maxsize == 2147483647"
+            \${PYTHON} -c "import struct; assert struct.calcsize('P') == 4"
+        done
+        exit 0
+        EOF
+
+  setup_python_64b:
+    name: setup-python 64b ${{ matrix.python }} on ${{ matrix.runner }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: ["ubuntu-latest", "macos-latest", "windows-latest"]
+        python: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12", "pypy3.7", "pypy3.8", "pypy3.9", "pypy3.10"]
+    steps:
+    - uses: actions/setup-python@v4
+      with:
+        python-version: "${{ matrix.python }}"
+        allow-prereleases: true
+    - name: Check 64b python
+      shell: bash
+      run: |
+        set -euxo pipefail
+        python -c "import sys; assert sys.maxsize == 9223372036854775807"
+        python -c "import struct; assert struct.calcsize('P') == 8"
+
+  setup_python_32b:
+    name: setup-python 32b ${{ matrix.python }} on ${{ matrix.runner }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: ["windows-latest"]
+        python: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
+    steps:
+    - uses: actions/setup-python@v4
+      with:
+        python-version: "${{ matrix.python }}"
+        allow-prereleases: true
+        architecture: x86
+    - name: Check 32b python
+      shell: bash
+      run: |
+        set -euxo pipefail
+        python -c "import sys; assert sys.maxsize == 2147483647"
+        python -c "import struct; assert struct.calcsize('P') == 4"
+
+  pyodide:
+    name: pyodide 32b ${{ matrix.version }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+    - name: Check 32b python
+      run: |
+        set -eux
+        pip install pyodide-build==0.23.4
+        pyodide venv .venv-pyodide
+        source .venv-pyodide/bin/activate
+        python -c "import sys; assert sys.maxsize == 2147483647"
+        python -c "import struct; assert struct.calcsize('P') == 4"
+
+  graalpy:
+    name: GraalPy ${{ matrix.platform }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: ["amd64"]
+    steps:
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+    - name: Check 64b python
+      run: |
+        docker run --platform linux/${{ matrix.platform }} -i --rm ghcr.io/graalvm/graalpy-community:slim /bin/sh << EOF
+        set -euxo pipefail
+        graalpy -c "import sys; assert sys.maxsize == 2147483647"
+        graalpy -c "import struct; assert struct.calcsize('P') == 8"
+        exit 0
+        EOF
+
+  pyston:
+    name: pyston ${{ matrix.platform }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: ["amd64", "arm64"]
+    steps:
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+    - name: Check 64b python
+      run: |
+        docker run --platform linux/${{ matrix.platform }} -i --rm pyston/slim:latest /bin/sh << EOF
+        set -eux
+        pyston -c "import sys; assert sys.maxsize == 9223372036854775807"
+        pyston -c "import struct; assert struct.calcsize('P') == 8"
+        exit 0
+        EOF
+
+  IronPython:
+    name: IronPython ${{ matrix.runner }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: ["windows-latest"]
+    steps:
+    - name: Check python
+      shell: bash
+      run: |
+        choco install ironpython
+        set -euxo pipefail
+        ipy.exe -c "import sys; assert sys.maxsize == 2147483647"
+        ipy.exe -c "import struct; assert struct.calcsize('P') == 8"
+        ipy32.exe -c "import sys; assert sys.maxsize == 2147483647"
+        ipy32.exe -c "import struct; assert struct.calcsize('P') == 4"
+
+  Jython64:
+    name: Jython 64b ${{ matrix.runner }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: ["windows-latest", "ubuntu-latest", "macos-latest"]
+    steps:
+    - uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '8'
+    - name: Check python
+      shell: bash
+      run: |
+        curl -fsSLO https://repo1.maven.org/maven2/org/python/jython-standalone/2.7.3/jython-standalone-2.7.3.jar
+        set -euxo pipefail
+        java -jar jython-standalone-2.7.3.jar -c "import sys; assert sys.maxsize == 2147483647"
+        java -jar jython-standalone-2.7.3.jar -c "import struct; assert struct.calcsize('P') == 8"
+
+  Jython32:
+    name: Jython 32b ${{ matrix.runner }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: ["windows-latest"]
+    steps:
+    - uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '8'
+        architecture: 'x86'
+    - name: Check python
+      shell: bash
+      run: |
+        curl -fsSLO https://repo1.maven.org/maven2/org/python/jython-standalone/2.7.3/jython-standalone-2.7.3.jar
+        set -euxo pipefail
+        java -jar jython-standalone-2.7.3.jar -c "import sys; assert sys.maxsize == 2147483647"
+        java -jar jython-standalone-2.7.3.jar -c "import struct; assert struct.calcsize('P') == 4"
