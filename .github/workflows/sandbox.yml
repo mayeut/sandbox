@@ -17,17 +17,13 @@ jobs:
     - name: test
       run: |
         set -x
-        fail_venv=0
-        fail_virtualenv=0
-        sudo apt-get update &>/dev/null
-        sudo apt-get install -y python3-distutils &>/dev/null
         python3 -m pip install virtualenv
         python3 -m venv --system-site-packages cp311-1
         cat cp311-1/pyvenv.cfg
         cp311-1/bin/python -m pip install numpy
         cp311-1/bin/python -m pip list
         cp311-1/bin/python -sSEc 'import sys; print(sys.path)'
-        python3 -m venv --system-site-packages cp311-2
+        cp311-1/bin/python -m venv --system-site-packages cp311-2
         cat cp311-2/pyvenv.cfg
         cp311-2/bin/python -m pip list
         cp311-2/bin/python -sSEc 'import sys; print(sys.path)'
