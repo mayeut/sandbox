@@ -24,12 +24,16 @@ jobs:
         python3 -m pip install virtualenv
         python3 -m venv cp311-1
         cat cp311-1/pyvenv.cfg
+        cp311-1/bin/python -sSEc 'import sys; print(sys.path)'
         python3 -m virtualenv cp311-2
         cat cp311-2/pyvenv.cfg
+        cp311-2/bin/python -sSEc 'import sys; print(sys.path)'
         ln -sf $(which python3) /usr/local/bin/python3
         /usr/local/bin/python3 -m venv cp311-3 || fail_venv=1
         cat cp311-3/pyvenv.cfg
+        cp311-3/bin/python -sSEc 'import sys; print(sys.path)'
         /usr/local/bin/python3 -m virtualenv cp311-4 || fail_virtualenv=1
         cp311-4/bin/python -c 'import subprocess' || fail_virtualenv=1
         cat cp311-4/pyvenv.cfg
+        cp311-4/bin/python -sSEc 'import sys; print(sys.path)'
         exit $(( $fail_venv + $fail_virtualenv ))
