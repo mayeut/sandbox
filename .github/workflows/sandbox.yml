@@ -3,7 +3,7 @@ name: Python test bitness
 on:
   push:
     branches:
-      - venv-reproducer
+      - venv-check-system-packages
   workflow_dispatch:
     # allow manual runs on branches without a PR
 
