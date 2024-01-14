@@ -16,11 +16,18 @@ jobs:
         python-version: "3.11"
     - name: test
       run: |
+        fail_venv=0
+        fail_virtualenv=0
         sudo apt-get update
         sudo apt-get install -y python3-distutils
         python3 -m pip install virtualenv
         python3 -m venv cp311-1
+        cat cp311-1/pyvenv.cfg
         python3 -m virtualenv cp311-2
+        cat cp311-2/pyvenv.cfg
         ln -sf $(which python3) /usr/local/bin/python3
-        /usr/local/bin/python3 -m venv cp311-3
-        /usr/local/bin/python3 -m virtualenv cp311-4
+        /usr/local/bin/python3 -m venv cp311-3 || fail_venv=1
+        cat cp311-3/pyvenv.cfg
+        /usr/local/bin/python3 -m virtualenv cp311-4 || fail_virtualenv=1
+        cat cp311-4/pyvenv.cfg
+        exit $(( $fail_venv + $fail_virtualenv ))
