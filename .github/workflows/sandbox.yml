@@ -30,5 +30,6 @@ jobs:
         /usr/local/bin/python3 -m venv cp311-3 || fail_venv=1
         cat cp311-3/pyvenv.cfg
         /usr/local/bin/python3 -m virtualenv cp311-4 || fail_virtualenv=1
+        cp311-4/bin/python -c 'import subprocess' || fail_virtualenv=1
         cat cp311-4/pyvenv.cfg
         exit $(( $fail_venv + $fail_virtualenv ))
