@@ -1,26 +1,15 @@
-name: Python test bitness
+name: PWSH test
 
 on:
   push:
     branches:
-      - venv-reproducer
+      - pwsh-test
   workflow_dispatch:
     # allow manual runs on branches without a PR
 
 jobs:
   venv:
-    runs-on: ubuntu-22.04
+    runs-on: windows-latest
     steps:
-    - uses: actions/setup-python@v5
-      with:
-        python-version: "3.11"
-    - name: test
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y python3-distutils
-        python3 -m pip install virtualenv
-        python3 -m venv cp311-1
-        python3 -m virtualenv cp311-2
-        ln -sf $(which python3) /usr/local/bin/python3
-        /usr/local/bin/python3 -m venv cp311-3
-        /usr/local/bin/python3 -m virtualenv cp311-4
+    - name: Build wheels
+        uses: pypa/cibuildwheel@v2.16.5
