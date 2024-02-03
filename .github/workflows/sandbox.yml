@@ -11,5 +11,9 @@ jobs:
   venv:
     runs-on: windows-latest
     steps:
+    - name: Test
+      shell: pwsh
+      run: |
+        & cmd /c "exit 1"
     - name: Build wheels
       uses: pypa/cibuildwheel@v2.16.5
