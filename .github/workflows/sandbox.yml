@@ -8,12 +8,22 @@ on:
     # allow manual runs on branches without a PR
 
 jobs:
-  venv:
+  pwsh:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-11, macos-14]
     runs-on: windows-latest
     steps:
     - name: Test
       shell: pwsh
+      if: runner.os == 'Windows'
       run: |
-        & cmd /c "exit 1"
+        & "cmd.exe" /c "exit 1"
+    - name: Test
+      shell: pwsh
+      if: runner.os != 'Windows'
+      run: |
+        & "/bin/bash" -c "exit 1"
     - name: Build wheels
       uses: pypa/cibuildwheel@v2.16.5
