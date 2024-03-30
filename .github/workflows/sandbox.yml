@@ -23,8 +23,13 @@ jobs:
       run: |
         set -euxo pipefail
         python -m venv 'venv A'
-
-
-    - name: works with shell
-      shell: bash
-      run: "${{ steps.setup.outputs.python }}" "${{ steps.setup.outputs.test }}"
+        if [ -d 'venv A/bin']; then
+            echo "python=$(pwd)/venv A/bin/python" >> "$GITHUB_OUTPUT"
+        else
+            echo "python=$(pwd)/venv A/Scripts/python.exe" >> "$GITHUB_OUTPUT"
+        fi
+        mkdir 'test A'
+        echo "print(__file__)" >> 'test A/test.py'
+        echo "t"
+        echo "test=$(pwd)/test A/test.py" >> "$GITHUB_OUTPUT"
+        echo "t"
