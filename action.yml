@@ -45,14 +45,15 @@ runs:
       shell: ${{ steps.default-python.outputs.python-path }} -u {0}
       run: print(__file__)
 
-    - name: python shell
-      shell: ${{ steps.default-python.outputs.python-path }} -u '{0}'
-      run: print(__file__)
+# C:\hostedtoolcache\windows\Python\3.12.2\x64\python.exe: can't open file "D:\\a\\sandbox\\sandbox\\'D:\\a\\_temp\\033b5271-ef38-47e0-81e9-6769b793c9e8'": [Errno 22] Invalid argument
+#    - name: python shell
+#      shell: ${{ steps.default-python.outputs.python-path }} -u '{0}'
+#      run: print(__file__)
 
 # Error: Second path fragment must not be a drive or UNC name. (Parameter 'expression')
-    - name: python shell
-      shell: ${{ steps.setup.outputs.python }} -u {0}
-      run: print(__file__)
+#    - name: python shell
+#      shell: ${{ steps.setup.outputs.python }} -u {0}
+#      run: print(__file__)
 
 # Error: /home/runner/work/sandbox/sandbox/./action.yml (Line: 49, Col: 14): A sequence was not expected
 #    - name: python shell
