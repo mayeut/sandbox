@@ -46,6 +46,11 @@ runs:
       run: print(__file__)
 
     - name: python shell
+      shell: ${{ steps.default-python.outputs.python-path }} -u '{0}'
+      run: print(__file__)
+
+# Error: Second path fragment must not be a drive or UNC name. (Parameter 'expression')
+    - name: python shell
       shell: ${{ steps.setup.outputs.python }} -u {0}
       run: print(__file__)
 
