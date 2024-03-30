@@ -16,28 +16,4 @@ jobs:
       matrix:
         runner: ["ubuntu-latest", "macos-latest", "windows-latest"]
     steps:
-    - uses: actions/setup-python@v5
-      with:
-        python-version: "3.x"
-    - name: setup environment
-      shell: bash
-      id: setup
-      run: |
-        set -euxo pipefail
-        python -m venv 'venv A'
-        if [ -d './venv A/bin' ]; then
-            echo "python=$(pwd)/venv A/bin/python" >> "$GITHUB_OUTPUT"
-        else
-            echo "python=$(pwd)/venv A/Scripts/python.exe" >> "$GITHUB_OUTPUT"
-        fi
-        mkdir 'test A'
-        echo "print(__file__)" >> 'test A/test.py'
-        echo "test=$(pwd)/test A/test.py" >> "$GITHUB_OUTPUT"
-
-    - name: works with shell
-      shell: bash
-      run: "'${{ steps.setup.outputs.python }}' '${{ steps.setup.outputs.test }}'"
-
-    - name: python shell
-      shell: ${{ steps.setup.outputs.python }}
-      run: print(__file__)
+    - uses: ./
