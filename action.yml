@@ -46,6 +46,11 @@ runs:
       run: print(__file__)
 
     - name: python shell
+      shell: ${{ steps.setup.outputs.python }} -u {0}
+      run: print(__file__)
+
+# Error: /home/runner/work/sandbox/sandbox/./action.yml (Line: 49, Col: 14): A sequence was not expected
+    - name: python shell
       shell: ["${{ steps.setup.outputs.python }}", "-u", "{0}"]
       run: print(__file__)
 
@@ -59,10 +64,6 @@ runs:
 # Error: Could not find a part of the path '/opt/hostedtoolcache/Python/3.12.2/x64/bin/'/home/runner/work/sandbox/sandbox'.
 # Error: Could not find a part of the path '/Users/runner/hostedtoolcache/Python/3.12.2/x64/bin/'/Users/runner/work/sandbox/sandbox'.
 # Error: The filename, directory name, or volume label syntax is incorrect. : 'C:\hostedtoolcache\windows\Python\3.12.2\x64\Scripts\'D:\a\sandbox\sandbox'
-#    - name: python shell
-#      shell: "'${{ steps.setup.outputs.python }}' -u '{0}'"
-#      run: print(__file__)
-
-#    - name: python shell
-#      shell: ${{ steps.setup.outputs.python }} -u {0}
-#      run: print(__file__)
+    - name: python shell
+      shell: "'${{ steps.setup.outputs.python }}' -u '{0}'"
+      run: print(__file__)
