@@ -30,6 +30,8 @@ jobs:
         fi
         mkdir 'test A'
         echo "print(__file__)" >> 'test A/test.py'
-        echo "t"
         echo "test=$(pwd)/test A/test.py" >> "$GITHUB_OUTPUT"
-        echo "t"
+
+    - name: works with shell
+      shell: bash
+      run: "'${{ steps.setup.outputs.python }}' '${{ steps.setup.outputs.test }}'"
