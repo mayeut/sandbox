@@ -29,6 +29,17 @@ runs:
       shell: bash
       run: "'${{ steps.setup.outputs.python }}' '${{ steps.setup.outputs.test }}'"
 
+    - name: python shell workaround
+      shell: bash
+      run: |
+        "${{ steps.setup.outputs.python }}" -u << "EOF"
+        print(__file__)
+        EOF
+
     - name: python shell
-      shell: ${{ steps.setup.outputs.python }}
+      shell: "'${{ steps.setup.outputs.python }}' -u"
       run: print(__file__)
+
+#    - name: python shell
+#      shell: ${{ steps.setup.outputs.python }} -u
+#      run: print(__file__)
