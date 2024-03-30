@@ -37,3 +37,7 @@ jobs:
     - name: works with shell
       shell: bash
       run: "'${{ steps.setup.outputs.python }}' '${{ steps.setup.outputs.test }}'"
+
+    - name: python shell
+      shell: ${{ steps.setup.outputs.python }}
+      run: print(__file__)
