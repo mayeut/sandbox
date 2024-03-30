@@ -23,11 +23,6 @@ jobs:
       run: |
         set -euxo pipefail
         python -m venv 'venv A'
-        if [ -d 'venv A/bin']; then
-            echo "python=$(pwd)/venv A/bin/python" >> "$GITHUB_OUTPUT"
-        else
-            echo "python=$(pwd)/venv A/Scripts/python.exe" >> "$GITHUB_OUTPUT"
-        fi
 
 
     - name: works with shell
