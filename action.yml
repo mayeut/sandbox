@@ -22,9 +22,9 @@ runs:
         if [ -d './venv A/bin' ]; then
             PYTHON_PATH="$(pwd)/venv A/bin/python"
         else
-            PYTHON_PATH="$(pwd)/venv A/Scripts/python.exe)"
-            PYTHON_PATH="$(cygpath -w ${PYTHON_PATH})"
-            TEST_PATH="$(cygpath -w ${TEST_PATH})"
+            PYTHON_PATH="$(pwd)/venv A/Scripts/python.exe"
+            PYTHON_PATH="$(cygpath -w '${PYTHON_PATH}')"
+            TEST_PATH="$(cygpath -w '${TEST_PATH}')"
         fi
         echo "python=${PYTHON_PATH}" >> "$GITHUB_OUTPUT"
         echo "test=${TEST_PATH}" >> "$GITHUB_OUTPUT"
