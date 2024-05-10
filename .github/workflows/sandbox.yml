@@ -23,4 +23,4 @@ jobs:
       - name: Build wheel
         run: |
           pip -V
-          pip build wheel forty-two --wheel-dir=./ --no-deps -vvv
+          pip wheel ./forty-two --wheel-dir=./ --no-deps -vvv
