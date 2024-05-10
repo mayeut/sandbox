@@ -23,5 +23,6 @@ jobs:
       - name: Build wheel
         run: |
           # pip install -U setuptools wheel
+          pip install setuptools==67.6.1 wheel==0.40.0
           pip list
           pip wheel ./forty-two --wheel-dir=./ --no-deps -vvv
