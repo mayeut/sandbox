@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  windows_wheel:
+  wheel:
     name: windows ${{ matrix.architecture }}
     runs-on: windows-latest
     strategy:
@@ -20,7 +20,7 @@ jobs:
           python-version: "3.13"
           architecture: ${{ matrix.architecture }}
           allow-prereleases: true
-    - name: Build wheel
-      run: |
-        pip -V
-        pip build wheel forty-two --wheel-dir=./ --no-deps -vvv
+      - name: Build wheel
+        run: |
+          pip -V
+          pip build wheel forty-two --wheel-dir=./ --no-deps -vvv
