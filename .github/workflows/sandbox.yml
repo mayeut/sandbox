@@ -1,0 +1,26 @@
+name: SandBox
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  windows_wheel:
+    name: windows ${{ matrix.architecture }}
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: ["x64", "x86"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          architecture: ${{ matrix.architecture }}
+          allow-prereleases: true
+    - name: Build wheel
+      run: |
+        pip -V
+        pip build wheel forty-two --wheel-dir=./ --no-deps -vvv
