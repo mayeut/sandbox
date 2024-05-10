@@ -22,5 +22,6 @@ jobs:
           allow-prereleases: true
       - name: Build wheel
         run: |
-          pip -V
-          pip wheel ./forty-two --wheel-dir=./ --no-deps -vvv
+          pip install -U setuptools wheel
+          pip list
+          pip wheel --no-build-isolation ./forty-two --wheel-dir=./ --no-deps -vvv
