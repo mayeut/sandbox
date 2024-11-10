@@ -36,7 +36,7 @@ jobs:
           echo "$PATH"
           which python
           which python3
-          which python3.13
+          which python3.13 || true
           which python3.13t
           python3.13 -VV || python3 -VV
           python3.13t -VV
