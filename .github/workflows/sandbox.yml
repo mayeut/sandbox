@@ -1,0 +1,35 @@
+name: SandBox
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  setup_python:
+    name: ${{ matrix.os }} ${{ matrix.architecture }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["windows-latest", "ubuntu-latest", "macos-13"]
+        architecture: ["x64"]
+        include:
+          - os: "windows-latest"
+            platform: "x86"
+          - os: "macos-14"
+            platform: "arm64"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: quansight-labs/setup-python@v5
+        with:
+          python-version: |
+            3.13t
+            3.13
+          architecture: ${{ matrix.architecture }}
+      - name: Check python
+        run: |
+          set -ex
+          python3.13 -VV || python3 -VV
+          python3.13t -VV
+
