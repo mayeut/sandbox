@@ -23,12 +23,12 @@ jobs:
       - name: Set up Python
         uses: quansight-labs/setup-python@v5
         with:
-          python-version: "3.13t"
+          python-version: "3.13"
           architecture: ${{ matrix.architecture }}
       - name: Set up Python
         uses: quansight-labs/setup-python@v5
         with:
-          python-version: "3.13"
+          python-version: "3.13t"
           architecture: ${{ matrix.architecture }}
       - name: Check python
         run: |
