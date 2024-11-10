@@ -32,4 +32,5 @@ jobs:
           set -ex
           python3.13 -VV || python3 -VV
           python3.13t -VV
+        shell: bash
 
