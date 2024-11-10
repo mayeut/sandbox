@@ -33,6 +33,7 @@ jobs:
       - name: Check python
         run: |
           set -ex
+          echo "$PATH"
           which python
           which python3
           which python3.13
