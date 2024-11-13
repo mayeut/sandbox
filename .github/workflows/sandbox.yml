@@ -35,7 +35,7 @@ jobs:
           set -ex
           echo "$PATH"
           if [ -d /c/hostedtoolcache/windows ]; then
-              find /c/hostedtoolcache/windows/Python/3.13.0/  -max-depth 2 -name 'python*'
+              find /c/hostedtoolcache/windows/Python/3.13.0 -maxdepth 2 -name 'python*'
               py --list
           fi
           which python
