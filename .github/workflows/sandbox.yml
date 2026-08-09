@@ -14,11 +14,14 @@ jobs:
         os: ["windows-2025", "windows-2022", "windows-11-arm", "windows-11-vs2026-arm"]
     steps:
       - uses: actions/checkout@v7
+      - name: Install pymanager
+        run:
+          Add-AppxPackage -AppInstallerFile https://www.python.org/ftp/python/pymanager/pymanager.appinstaller
       - name: Check python
         run: |
           set -ex
           which -a py
-          winget install 9NQ7512CXL7T -e --accept-package-agreements --disable-interactivity
+          # winget install 9NQ7512CXL7T -e --accept-package-agreements --disable-interactivity
           which -a py
           py list
         shell: bash
