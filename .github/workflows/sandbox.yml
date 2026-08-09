@@ -18,6 +18,8 @@ jobs:
         run: |
           set -ex
           which -a py
+          winget install 9NQ7512CXL7T -e --accept-package-agreements --disable-interactivity
+          which -a py
           py list
         shell: bash
 
